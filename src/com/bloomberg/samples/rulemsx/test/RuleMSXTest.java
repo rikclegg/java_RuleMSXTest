@@ -141,9 +141,10 @@ public class RuleMSXTest {
     	rset.addRule(ruleIsUSExchange); // Parent is ruleset, so considered an Alpha node
     	ruleIsUSExchange.addRule(ruleIsIBM); // Parent is another rule, so considered a Beta node
 
-    	for(DataSet ds: rmsx.getDataSets()) {
-    		
-    	}
+    	// Iterate all datasets, submiting them to the ruleset
+    	//for(DataSet ds: rmsx.getDataSets()) {
+    	//	
+    	//}
     }
 
     class EMSXFieldDataPoint implements DataPointSource,NotificationHandler {
