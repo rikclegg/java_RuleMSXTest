@@ -1,5 +1,6 @@
 package com.bloomberg.samples.rulemsx.test;
 
+import java.security.Security;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -9,11 +10,10 @@ import com.bloomberg.emsx.samples.Field;
 import com.bloomberg.emsx.samples.FieldChange;
 import com.bloomberg.emsx.samples.Log;
 import com.bloomberg.emsx.samples.Notification;
+import com.bloomberg.emsx.samples.Notification.NotificationType;
 import com.bloomberg.emsx.samples.NotificationHandler;
 import com.bloomberg.emsx.samples.Order;
 import com.bloomberg.mktdata.samples.EasyMKT;
-import com.bloomberg.mktdata.samples.Notification.NotificationType;
-import com.bloomberg.mktdata.samples.Security;
 import com.bloomberg.samples.rulemsx.DataPoint;
 import com.bloomberg.samples.rulemsx.DataPointSource;
 import com.bloomberg.samples.rulemsx.DataSet;
