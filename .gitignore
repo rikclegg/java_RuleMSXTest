@@ -1,6 +1,10 @@
 /bin/
 <<<<<<< HEAD
+<<<<<<< HEAD
 .classpath
+=======
+.classpath
+>>>>>>> refs/heads/Development
 =======
 .classpath
 >>>>>>> refs/heads/Development
