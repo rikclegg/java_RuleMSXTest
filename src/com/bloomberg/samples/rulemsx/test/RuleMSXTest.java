@@ -1,6 +1,5 @@
 package com.bloomberg.samples.rulemsx.test;
 
-import java.security.Security;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -10,10 +9,10 @@ import com.bloomberg.emsx.samples.Field;
 import com.bloomberg.emsx.samples.FieldChange;
 import com.bloomberg.emsx.samples.Log;
 import com.bloomberg.emsx.samples.Notification;
-import com.bloomberg.emsx.samples.Notification.NotificationType;
 import com.bloomberg.emsx.samples.NotificationHandler;
 import com.bloomberg.emsx.samples.Order;
 import com.bloomberg.mktdata.samples.EasyMKT;
+import com.bloomberg.mktdata.samples.Security;
 import com.bloomberg.samples.rulemsx.DataPoint;
 import com.bloomberg.samples.rulemsx.DataPointSource;
 import com.bloomberg.samples.rulemsx.DataSet;
@@ -101,6 +100,10 @@ public class RuleMSXTest {
         	exchange.setDataPointSource(new EMSXFieldDataPoint(o.field("EMSX_EXCHANGE"),exchange));
         	System.out.println("New DataPoint added : " + exchange.getName());
 
+        	DataPoint ticker = rmsxTest.addDataPoint("Ticker");
+        	ticker.setDataPointSource(new EMSXFieldDataPoint(o.field("EMSX_TICKER"),ticker));
+        	System.out.println("New DataPoint added : " + ticker.getName());
+
         	DataPoint isin = rmsxTest.addDataPoint("ISIN");
         	isin.setDataPointSource(new RefDataDataPoint("ID_ISIN",o.field("EMSX_TICKER").value()));
         	System.out.println("New DataPoint added : " + isin.getName());
@@ -133,7 +136,7 @@ public class RuleMSXTest {
     	// Create new RuleSet
     	RuleSet rset = rmsx.createRuleSet("TestRules");
     	
-    	Rule ruleIsLNExchange = new Rule("IsLNExchange",new StringEqualityRule("Exchange","UK"), new RouteToBroker("BB"));
+    	Rule ruleIsLNExchange = new Rule("IsLNExchange",new StringEqualityRule("Exchange","LN"), new RouteToBroker("BB"));
     	Rule ruleIsUSExchange = new Rule("IsUSExchange",new StringEqualityRule("Exchange","US"), new RouteToBroker("DMTB"));
     	Rule ruleIsIBM = new Rule("IsIBM",new StringEqualityRule("Ticker","IBM US Equity"), new SendAdditionalSignal("This is IBM!!"));
     	
@@ -142,9 +145,11 @@ public class RuleMSXTest {
     	ruleIsUSExchange.addRule(ruleIsIBM); // Parent is another rule, so considered a Beta node
 
     	// Iterate all datasets, submiting them to the ruleset
-    	//for(DataSet ds: rmsx.getDataSets()) {
-    	//	
-    	//}
+    	for(DataSet ds: rmsx.getDataSets()) {
+    		rset.execute(ds);
+    	}
+    	
+    	return;
     }
 
     class EMSXFieldDataPoint implements DataPointSource,NotificationHandler {
@@ -258,7 +263,7 @@ public class RuleMSXTest {
 
 		@Override
 		public void processNotification(com.bloomberg.mktdata.samples.Notification notification) {
-			if(notification.type==NotificationType.FIELD) {
+			if(notification.type==com.bloomberg.mktdata.samples.Notification.NotificationType.FIELD) {
 				this.value = notification.getFieldChanges().get(0).newValue;
 				System.out.println("Update for " + this.security.getName() + ": " + this.fieldName + "=" + this.value);
 			}
